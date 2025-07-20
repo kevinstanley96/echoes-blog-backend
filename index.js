@@ -52,3 +52,6 @@ app.use('/api/comments', commentRoutes);
 // ✅ STEP 6: Start server
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => console.log(`🚀 Server running on http://localhost:${PORT}`));
+
+const authRoutes = require('./routes/auth');
+app.use('/api/auth', authRoutes);
