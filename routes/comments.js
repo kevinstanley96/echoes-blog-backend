@@ -3,7 +3,7 @@ const router = express.Router();
 const Comment = require('../models/Comment');
 
 // Get comments for a specific post
-router.get('/', async (req, res) => {
+router.get('/postId', async (req, res) => {
   try {
     const comments = await Comment.find({ postId: req.params.postId }).sort({ _id: -1 });
     res.json(comments);
