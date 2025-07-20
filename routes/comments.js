@@ -2,8 +2,8 @@ const express = require('express');
 const router = express.Router();
 const Comment = require('../models/Comment');
 
-// Get comments for a specific post
-router.get('/postId', async (req, res) => {
+// ✅ Get comments for a specific post (fixed the route)
+router.get('/:postId', async (req, res) => {
   try {
     const comments = await Comment.find({ postId: req.params.postId }).sort({ _id: -1 });
     res.json(comments);
@@ -12,7 +12,18 @@ router.get('/postId', async (req, res) => {
   }
 });
 
-// Like a comment
+// ✅ Create a new comment
+router.post('/', async (req, res) => {
+  try {
+    const newComment = new Comment(req.body);
+    await newComment.save();
+    res.status(201).json(newComment);
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to post comment' });
+  }
+});
+
+// ✅ Like a comment
 router.post('/:id/like', async (req, res) => {
   try {
     const comment = await Comment.findByIdAndUpdate(
@@ -26,7 +37,7 @@ router.post('/:id/like', async (req, res) => {
   }
 });
 
-// Reply to a comment
+// ✅ Reply to a comment
 router.post('/:id/reply', async (req, res) => {
   try {
     const reply = { text: req.body.text };
