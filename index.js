@@ -9,7 +9,7 @@ const PORT = process.env.PORT || 3001;
 
 // CORS Configuration (allow Netlify frontend)
 app.use(cors({
-  origin: ['https://dalaichamblog.netlify.app'],
+  origin: ['http://127.0.0.1:5500', 'https://dalaichamblog.netlify.app'],
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   credentials: false
 }));
