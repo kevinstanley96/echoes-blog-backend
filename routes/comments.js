@@ -2,25 +2,42 @@ const express = require('express');
 const router = express.Router();
 const Comment = require('../models/Comment');
 
-// GET all comments for a specific post
+// Get comments for a specific post
 router.get('/:postId', async (req, res) => {
   try {
-    const comments = await Comment.find({ postId: req.params.postId }).sort({ date: -1 });
+    const comments = await Comment.find({ postId: req.params.postId }).sort({ _id: -1 });
     res.json(comments);
   } catch (err) {
-    res.status(500).json({ error: 'Server error fetching comments.' });
+    res.status(500).json({ error: 'Could not fetch comments' });
   }
 });
 
-// POST a new comment
-router.post('/', async (req, res) => {
-  const { postId, name, message } = req.body;
+// Like a comment
+router.post('/:id/like', async (req, res) => {
   try {
-    const newComment = new Comment({ postId, name, message });
-    await newComment.save();
-    res.json(newComment);
+    const comment = await Comment.findByIdAndUpdate(
+      req.params.id,
+      { $inc: { likes: 1 } },
+      { new: true }
+    );
+    res.json(comment);
   } catch (err) {
-    res.status(400).json({ error: 'Error saving comment.' });
+    res.status(500).json({ error: 'Could not like comment' });
+  }
+});
+
+// Reply to a comment
+router.post('/:id/reply', async (req, res) => {
+  try {
+    const reply = { text: req.body.text };
+    const comment = await Comment.findByIdAndUpdate(
+      req.params.id,
+      { $push: { replies: reply } },
+      { new: true }
+    );
+    res.json(comment);
+  } catch (err) {
+    res.status(500).json({ error: 'Could not reply' });
   }
 });
 
