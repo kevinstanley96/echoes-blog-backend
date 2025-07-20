@@ -2,6 +2,11 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cors = require('cors');
+app.use(cors({
+  origin: ['https://dalaichamblog.netlify.app'], // allow Netlify frontend
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  credentials: true
+}));
 require('dotenv').config();
 
 const app = express();
