@@ -2,15 +2,9 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cors = require('cors');
-app.use(cors({
-  origin: ['https://dalaichamblog.netlify.app'], // allow Netlify frontend
-  methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  credentials: true
-}));
 require('dotenv').config();
 
-const app = express();
-const PORT = process.env.PORT || 3001;
+const app = express(); // ✅ Moved BEFORE any app.use()
 
 // ✅ STEP 1: Allow CORS for local + Netlify + Render frontend
 const allowedOrigins = [
@@ -56,4 +50,5 @@ const commentRoutes = require('./routes/comments');
 app.use('/api/comments', commentRoutes);
 
 // ✅ STEP 6: Start server
+const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => console.log(`🚀 Server running on http://localhost:${PORT}`));
